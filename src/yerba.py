@@ -1,4 +1,5 @@
 from os import walk, getcwd
+from sys import argv
 
 from toolnames import formats, vcm_dir
 
@@ -40,6 +41,7 @@ def filter_files_by_language(project_files):
     value representing the number of files using this
     language
     """
+
     res = filter(
         lambda x : x[1]>0, 
         [
@@ -48,3 +50,26 @@ def filter_files_by_language(project_files):
          ])
     
     return dict(res)
+
+def yerba_main(project_root):
+    """
+    Main wrapper for yerba project
+    Returns a dictionnary of all programming languages
+    used in the project, each one with an associated
+    value representing the number of files using this
+    language
+    """
+
+    project_files = get_project_files(project_root)
+    stats = filter_files_by_language(project_files)
+    
+    return stats
+
+if __name__ == '__main__':
+
+    if len(argv) >1:
+        root = argv[1]
+        print yerba_main(root)
+    
+    else:
+        print 'Too few arguments. Project root directory is needed.'
