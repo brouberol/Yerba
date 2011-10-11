@@ -1,5 +1,6 @@
 from os import walk, getcwd
 from sys import argv
+from math import ceil, floor
 
 from toolnames import formats, vcm_dir
 
@@ -51,6 +52,22 @@ def filter_files_by_language(project_files):
     
     return dict(res)
 
+def results_percent(count):
+    """
+    Given numeric results, returns them in percentage 
+    (result integer : 60% --> 60)
+    """
+    
+    nb_files = sum(x for x in count.values())
+    percent = dict(count) # This is not copying, this is cloning
+    
+    for language in percent:
+        ratio = int(100*round(float(percent[language]) / nb_files,2))
+        percent[language] = ratio
+    
+    return percent
+        
+
 def yerba_main(project_root):
     """
     Main wrapper for yerba project
@@ -61,8 +78,8 @@ def yerba_main(project_root):
     """
 
     project_files = get_project_files(project_root)
-    stats = filter_files_by_language(project_files)
-    
+    count = filter_files_by_language(project_files)
+    stats = results_percent(count)
     return stats
 
 if __name__ == '__main__':
