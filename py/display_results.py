@@ -5,11 +5,11 @@
 from os import system
 import fileinput
 
-def create_project_folders(root):
-    system('mkdir -p {0}/yerba/html/'.format(root))
-    system('mkdir -p {0}/yerba/css/'.format(root))
-    system('cp ../html/template.html {0}/yerba/html/yerba.html'.format(root))
-    system('cp ../css/yerba.css {0}/yerba/css/'.format(root))
+def create_project_folders(yerba_root, project_root):
+    system('mkdir -p {0}/yerba/html/'.format(project_root))
+    system('mkdir -p {0}/yerba/css/'.format(project_root))
+    system('cp {0}/html/template.html {1}/yerba/html/yerba.html'.format(yerba_root, project_root))
+    system('cp {0}/css/yerba.css {1}/yerba/css/'.format(yerba_root, project_root))
     return
                
 
@@ -34,8 +34,8 @@ def fill_html(root, results):
     html.close()
     return
 
-def generate_html(project_root, results):
-    create_project_folders(project_root)
+def generate_html(project_root, yerba_root, results):
+    create_project_folders(yerba_root, project_root)
     fill_html(project_root, results)
     return
     

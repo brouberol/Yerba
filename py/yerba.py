@@ -1,4 +1,5 @@
 from os import walk, getcwd
+from os.path import dirname, relpath, abspath
 from sys import argv
 
 from toolnames import formats, vcm_dir
@@ -68,7 +69,7 @@ def results_percent(count):
     
     return percent
 
-def yerba_main(project_root):
+def yerba_main(project_root, yerba_root):
     """
     Main wrapper for yerba project
     Returns a dictionnary of all programming languages
@@ -80,13 +81,15 @@ def yerba_main(project_root):
     project_files = get_project_files(project_root)
     count = filter_files_by_language(project_files)
     stats = results_percent(count)
-    generate_html(project_root, stats)
+    generate_html(project_root, yerba_root,  stats)
 
 if __name__ == '__main__':
 
     if len(argv) >1:
-        root = argv[1]
-        yerba_main(root)
+        
+        yerba_root = dirname(abspath(argv[0])).replace('/py','')
+        root = relpath(argv[1])
+        yerba_main(root, yerba_root)
     
     else:
         print 'Too few arguments. Project root directory is needed.'
