@@ -109,7 +109,6 @@ def yerba_main(project_root, yerba_root, title):
     percent = results_percent(count)
     generate_html(project_root, yerba_root,  percent, stats, title)
 
-
 if __name__ == '__main__':
     
     if len(argv) >1:

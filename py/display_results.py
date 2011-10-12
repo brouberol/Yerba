@@ -2,6 +2,9 @@ from os import system
 import fileinput
 
 def create_project_folders(yerba_root, project_root):
+    """
+    Creates/copy needed folder and .css & .html files in target project root
+    """
     system('mkdir -p {0}/yerba/html/'.format(project_root))
     system('mkdir -p {0}/yerba/css/'.format(project_root))
     system('cp {0}/html/template.html {1}/yerba/html/yerba.html'.format(yerba_root, project_root))
@@ -10,6 +13,9 @@ def create_project_folders(yerba_root, project_root):
                
 
 def fill_html(root, results, stats, title):
+    """
+    Fill html template with project information
+    """
     html = open('{0}/yerba/html/yerba.html'.format(root), 'r')
     text = html.read()
     html.close()
@@ -50,6 +56,9 @@ def fill_html(root, results, stats, title):
     return
 
 def generate_html(project_root, yerba_root, results, stats, title):
+    """
+    Main wrapper
+    """
     create_project_folders(yerba_root, project_root)
     fill_html(project_root, results, stats, title)
     return
