@@ -31,9 +31,10 @@ formats = {
 }
 
 #Mercurial missing
-vcm_dir = [
+exclude_dir = [
     '.git',
     '.svn',
+    'yerba',
 ]
     
     

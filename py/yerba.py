@@ -3,7 +3,7 @@ from os.path import dirname, relpath, abspath
 from sys import argv
 from getopt import getopt, GetoptError
 
-from toolnames import formats, vcm_dir
+from toolnames import formats, exclude_dir
 from display_results import generate_html
 
 def get_project_files(project_root):
@@ -17,12 +17,11 @@ def get_project_files(project_root):
     project = walk(project_root)
     project_files = []
     for base, dirs, files in project:
-        if vcm_dir[0] not in base and vcm_dir[1] not in base: 
+        if exclude_dir[0] not in base and exclude_dir[1] not in base and exclude_dir[2] not in base: 
             # we filter out files in .git/.svn... folders
             for f in files:
                 if f.split('.')[-1] in formats.values(): # if known extension
                     project_files.append(abspath(base+'/'+f) )                                   
-
     return project_files
 
 def stats_files(files):
@@ -40,20 +39,22 @@ def stats_files(files):
     nb_files = len(files)
 
     return (nb_files, tot_nb_lines)
-        
-        
-        
-def count_files_with_extension(project_files, extension):
+
+def count_lines_by_extension(project_files):
     """
     Given a list of the project files, it returns
-    an integer value of the number of times a file
-    extension is seen
+    the number of lines of code written in each language
     """
 
-    res = 0
-    for p_file in project_files:
-        if extension == p_file.split('.')[-1]: #split returns file extension
-            res+=1
+    res = []
+    for extension in formats.values():
+        nb_lines = 0
+    
+        for p_file in project_files:
+            if extension == p_file.split('.')[-1]: #split returns file extension
+                with open(p_file,'r') as f:
+                    nb_lines+=len(f.readlines())
+        res.append(nb_lines)
 
     return res
 
@@ -62,17 +63,16 @@ def filter_files_by_language(project_files):
     Given a list of the project files, it returns
     a list of lists of all programming languages
     used in the project, each one with an associated
-    value representing the number of files using this
-    language
+    value representing the number of lines written
+    in a given language
     """
 
     res = filter( 
-        lambda x : x[1]>0, # filter languages with no found associated files
+        lambda x : x[1]>0, # filter out languages with no found associated files
         [
-            [lang, count_files_with_extension(project_files, extension)] 
-            for lang, extension in zip(formats.keys(), formats.values())
+            [lang, nblines]
+            for lang, nblines in zip(formats.keys(), count_lines_by_extension(project_files))
          ])
-
     return res
 
 def results_percent(count):
@@ -81,12 +81,11 @@ def results_percent(count):
     (result integer : 60% --> 60)
     """
     
-    nb_files = sum(value for (lang, value) in count)
+    tot_nb_lines = sum(lines for (lang, lines) in count)
     percent = list(count) # This is not copying, this is cloning
-    
-    for language, value in percent:
-        ratio = int(100*round(float(value) / nb_files,2))
-        value = ratio
+
+    for i in range(len(count)):
+        percent[i][1] = int(100*round(float(count[i][1]) / tot_nb_lines,2))
     
     percent = sort_result(percent)
 
