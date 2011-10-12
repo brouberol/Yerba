@@ -1,4 +1,4 @@
-<h1>Yerba, a project sum-up generator</h1>
+<h1>Yerba, a project stats panel generator</h1>
 
 <h2>What does it do?</h2>
 <p>Yerba analyses your project, and generates a small stats panel.</p>
