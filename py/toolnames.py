@@ -1,7 +1,7 @@
 """
 File containing :
     * a list of programming languages and associated file extensions
-    * a list of know Version Control Manager root path
+    * a list of directories which are to be excluded
 """
 
 formats = {
