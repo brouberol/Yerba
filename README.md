@@ -16,8 +16,8 @@
   <li>getopt
 </ul> and a Unix/Linux OS.</p>
 
-<h2>Tools</h2>
-<p>Emacs, ipython, insomnia.</p>
+<h2>What tools did you use?</h2>
+<p>Emacs, ipython, insomnia, yerba maté.</p>
 
 <h2>You suck at HTML/CSS !</h2>
 I know. Please, fork it you can do better :)
