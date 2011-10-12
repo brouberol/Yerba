@@ -2,9 +2,16 @@ body {
     width: 700px;
 }
 
-p {
+p , li, h1{
     font-family: 'Ubuntu Condensed', sans-serif;
+}
+
+p, li {
     font-size: 15px;
+}
+
+h1 {
+    font-size: 18px;
 }
 
 a {
@@ -17,6 +24,10 @@ a:hover {
     border-bottom: none;
 }
 
+section.stats ul {
+    list-style-type: none;
+}
+
 footer {
     padding-top: 10px;
 }
@@ -27,3 +38,23 @@ footer p , footer a {
     color: #aaa;
 }
 
+element.style {
+        width: 100%;
+}
+
+#languages p.bar {
+    background-color: #4183C4;
+    border-radius: 4px;
+    color: #FFFFFF;
+    display: block;
+    min-width: 20px;
+    padding: 3px;
+    text-decoration: none;
+    box-shadow: 3px 3px 8px #888;
+}
+
+
+* {
+    margin: 2px;
+    padding: 1px;
+}

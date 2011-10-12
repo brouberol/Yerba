@@ -1,6 +1,7 @@
-from os import walk, getcwd
+from os import walk, getcwd, system
 from os.path import dirname, relpath, abspath
 from sys import argv
+from getopt import getopt, GetoptError
 
 from toolnames import formats, vcm_dir
 from display_results import generate_html
@@ -8,9 +9,9 @@ from display_results import generate_html
 def get_project_files(project_root):
     """
     Given a project root, it returns a list 
-    containing all project files, given that
-    not contained in a Version Control Manager
-    directory (.git, .svn, ...)
+    containing all absolute path tpproject files,
+    given that they are not contained in a Version 
+    Control Manager directory (.git, .svn, ...)
     """
 
     project = walk(project_root)
@@ -18,9 +19,29 @@ def get_project_files(project_root):
     for base, dirs, files in project:
         if vcm_dir[0] not in base and vcm_dir[1] not in base: 
             # we filter out files in .git/.svn... folders
-            project_files += files
+            for f in files:
+                if f.split('.')[-1] in formats.values(): # if known extension
+                    project_files.append(abspath(base+'/'+f) )                                   
 
     return project_files
+
+def stats_files(files):
+    """
+    Given a list of abspaths to files, it returns
+    the number of files and the total number of lines
+    in all files
+    """
+    tot_nb_lines= 0
+    for p_file in files:
+        f = open(p_file, 'r')
+        li = len(f.readlines())
+        f.close()
+        tot_nb_lines += li
+    nb_files = len(files)
+
+    return (nb_files, tot_nb_lines)
+        
+        
         
 def count_files_with_extension(project_files, extension):
     """
@@ -39,7 +60,7 @@ def count_files_with_extension(project_files, extension):
 def filter_files_by_language(project_files):
     """
     Given a list of the project files, it returns
-    a dictionnary of all programming languages
+    a list of lists of all programming languages
     used in the project, each one with an associated
     value representing the number of files using this
     language
@@ -48,11 +69,11 @@ def filter_files_by_language(project_files):
     res = filter( 
         lambda x : x[1]>0, # filter languages with no found associated files
         [
-            (lang, count_files_with_extension(project_files, extension)) 
+            [lang, count_files_with_extension(project_files, extension)] 
             for lang, extension in zip(formats.keys(), formats.values())
          ])
-    
-    return dict(res)
+
+    return res
 
 def results_percent(count):
     """
@@ -60,16 +81,21 @@ def results_percent(count):
     (result integer : 60% --> 60)
     """
     
-    nb_files = sum(x for x in count.values())
-    percent = dict(count) # This is not copying, this is cloning
+    nb_files = sum(value for (lang, value) in count)
+    percent = list(count) # This is not copying, this is cloning
     
-    for language in percent:
-        ratio = int(100*round(float(percent[language]) / nb_files,2))
-        percent[language] = ratio
+    for language, value in percent:
+        ratio = int(100*round(float(value) / nb_files,2))
+        value = ratio
     
+    percent = sort_result(percent)
+
     return percent
 
-def yerba_main(project_root, yerba_root):
+def sort_result(percent):
+    return sorted(percent, key = lambda x: -x[1]) 
+
+def yerba_main(project_root, yerba_root, title):
     """
     Main wrapper for yerba project
     Returns a dictionnary of all programming languages
@@ -79,17 +105,27 @@ def yerba_main(project_root, yerba_root):
     """
 
     project_files = get_project_files(project_root)
+    stats = stats_files(project_files)
     count = filter_files_by_language(project_files)
-    stats = results_percent(count)
-    generate_html(project_root, yerba_root,  stats)
+    percent = results_percent(count)
+    generate_html(project_root, yerba_root,  percent, stats, title)
+
 
 if __name__ == '__main__':
-
+    
     if len(argv) >1:
-        
+        arg, opts = getopt(argv[2:], 't:')
+
+        title = None
+        for o, a in arg:
+            if o in "-t":
+                title = a
+            else:
+                assert False, "unhandled option"
+            
         yerba_root = dirname(abspath(argv[0])).replace('/py','')
         root = relpath(argv[1])
-        yerba_main(root, yerba_root)
+        yerba_main(root, yerba_root, title)
     
     else:
         print 'Too few arguments. Project root directory is needed.'
