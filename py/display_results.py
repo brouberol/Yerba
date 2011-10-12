@@ -32,7 +32,8 @@ def fill_html(root, results, stats, title):
     
     # --- STATS GENERATION ---
     nbfiles, nblines = stats
-    st = '<ul>\n'
+    st  = '<h4 class="separator">Project size</h4>\n'
+    st += '<ul>\n'
     st += '\t<li>{0} files</li>\n'.format(nbfiles)
     st += '\t<li>{0} lines of code</li>\n'.format(nblines)
     st += '</ul>\n'
@@ -40,6 +41,7 @@ def fill_html(root, results, stats, title):
 
     # --- BARCHART GENERATION ---
     out = ''
+    out += '<h4 class="separator">Languages</h4>\n'
     for lang, value in results:
         out += '\n<tr>\n'
         out += '\t<td width="80">\n'
