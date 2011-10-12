@@ -1,0 +1,29 @@
+body {
+    width: 700px;
+}
+
+p {
+    font-family: 'Ubuntu Condensed', sans-serif;
+    font-size: 15px;
+}
+
+a {
+    text-decoration: none;
+    border-bottom:1px dotted;
+    text-shadow: #ddd 1px 0px 1px;
+}
+
+a:hover {
+    border-bottom: none;
+}
+
+footer {
+    padding-top: 10px;
+}
+
+footer p , footer a {
+    font-size: 13px;
+    text-align: right;
+    color: #aaa;
+}
+

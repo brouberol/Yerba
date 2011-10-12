@@ -80,13 +80,13 @@ def yerba_main(project_root):
     project_files = get_project_files(project_root)
     count = filter_files_by_language(project_files)
     stats = results_percent(count)
-    return stats
+    generate_html(project_root, stats)
 
 if __name__ == '__main__':
 
     if len(argv) >1:
         root = argv[1]
-        print yerba_main(root)
+        yerba_main(root)
     
     else:
         print 'Too few arguments. Project root directory is needed.'
