@@ -20,8 +20,10 @@ def get_project_files(project_root):
         if exclude_dir[0] not in base and exclude_dir[1] not in base and exclude_dir[2] not in base: 
             # we filter out files in .git/.svn... folders
             for f in files:
-                if f.split('.')[-1] in formats.values(): # if known extension
-                    project_files.append(abspath(base+'/'+f) )                                   
+                for value in formats.values(): # Ugly but C++ contains several extensions (hpp, h, cpp)
+                    if f.split('.')[-1].lower() in value: # if known extensions
+                        project_files.append(abspath(base+'/'+f))
+                                   
     return project_files
 
 def stats_files(files):
@@ -30,6 +32,7 @@ def stats_files(files):
     the number of files and the total number of lines
     in all files
     """
+
     tot_nb_lines= 0
     for p_file in files:
         f = open(p_file, 'r')
@@ -47,14 +50,23 @@ def count_lines_by_extension(project_files):
     """
 
     res = []
-    for extension in formats.values():
+    for extensions in formats.values():
         nb_lines = 0
-    
-        for p_file in project_files:
-            if extension == p_file.split('.')[-1]: #split returns file extension
-                with open(p_file,'r') as f:
-                    nb_lines+=len(f.readlines())
-        res.append(nb_lines)
+
+        if type(extensions) is str :
+            for p_file in project_files:
+                if p_file.split('.')[-1].lower() == extensions: #split returns file extension
+                    with open(p_file,'r') as f:
+                        nb_lines+=len(f.readlines())
+            res.append(nb_lines)
+        
+        elif type(extensions) is list: # ex : C++
+            for extension in extensions: # C++ contains several exensions (hpp, cpp, h) 
+                for p_file in project_files:
+                    if p_file.split('.')[-1].lower() == extension: #split returns file extension
+                        with open(p_file,'r') as f:
+                            nb_lines+=len(f.readlines())
+            res.append(nb_lines)
 
     return res
 
