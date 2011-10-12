@@ -1,5 +1,4 @@
 from os import system
-import fileinput
 
 def create_project_folders(yerba_root, project_root):
     """
