@@ -7,7 +7,7 @@
 <h2>Usage</h2>
 <p>Type in <pre>python path/to/yerba/py/yerba.py path/to/project/root [-t 'Project title]</pre></p>
 <p>The result page will be a html/css page, located at in the yerba/ folder, at the root of your project.<.p>
-
+<p>An output example is given <a href="https://github.com/BaltoRouberol/Yerba/blob/master/examples/Yerba.png">here</a>.</p>
 <h2>What do I need?</h2>
 <p>Python (all needed modules are pre-installed)
 <ul>
