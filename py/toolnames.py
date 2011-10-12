@@ -17,7 +17,6 @@ formats = {
     'HTML'         : 'html',
     'Java'         : 'java',
     'Javascript'   : 'js',
-    'LaTeX'        : 'tex',
     'Lisp'         : 'lisp',
     'Lua'          : 'lua',
     'Objective C'  : 'm',
