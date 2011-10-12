@@ -1,8 +1,8 @@
 from os import walk, getcwd
 from sys import argv
-from math import ceil, floor
 
 from toolnames import formats, vcm_dir
+from display_results import generate_html
 
 def get_project_files(project_root):
     """
@@ -15,7 +15,8 @@ def get_project_files(project_root):
     project = walk(project_root)
     project_files = []
     for base, dirs, files in project:
-        if vcm_dir[0] not in base and vcm_dir[1] not in base:
+        if vcm_dir[0] not in base and vcm_dir[1] not in base: 
+            # we filter out files in .git/.svn... folders
             project_files += files
 
     return project_files
@@ -29,7 +30,7 @@ def count_files_with_extension(project_files, extension):
 
     res = 0
     for p_file in project_files:
-        if extension == p_file.split('.')[-1]:
+        if extension == p_file.split('.')[-1]: #split returns file extension
             res+=1
 
     return res
@@ -43,8 +44,8 @@ def filter_files_by_language(project_files):
     language
     """
 
-    res = filter(
-        lambda x : x[1]>0, 
+    res = filter( 
+        lambda x : x[1]>0, # filter languages with no found associated files
         [
             (lang, count_files_with_extension(project_files, extension)) 
             for lang, extension in zip(formats.keys(), formats.values())
@@ -66,7 +67,6 @@ def results_percent(count):
         percent[language] = ratio
     
     return percent
-        
 
 def yerba_main(project_root):
     """
