@@ -1,3 +1,10 @@
+"""
+Project parsing functions returning:
+  * number of code files in the project
+  * total number lines in these code files
+  * proportion of each language throughout the whole project
+"""
+
 from os import walk, getcwd, system
 from os.path import dirname, relpath, abspath, exists
 from sys import argv
@@ -105,6 +112,11 @@ def results_percent(count):
     return percent
 
 def sort_result(percent):
+    """
+    Sorting function allowing us to order programming 
+    languages by their proportion, in order to obtain
+    a nice graph
+    """
     return sorted(percent, key = lambda x: -x[1]) 
 
 def yerba_main(project_root, yerba_root, title):

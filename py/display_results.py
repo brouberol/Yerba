@@ -1,3 +1,9 @@
+"""
+Definition of functions interacting with the html elements
+  * copying of templates .html and .css
+  * filling of these templates with project statistics
+"""
+
 from os import system
 
 def create_project_folders(yerba_root, project_root):
