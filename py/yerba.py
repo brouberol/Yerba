@@ -1,8 +1,14 @@
 """
-Project parsing functions returning:
-  * number of code files in the project
-  * total number lines in these code files
-  * proportion of each language throughout the whole project
+Yerba parses a project, analyses the number of code files, 
+their total number of lines and the proportion of each 
+language throughout the whole project.
+
+The output is a HTML file with associated css and is 
+to be found in the yerba/ folder, created at the root
+of your project.
+
+Author: @BaltoRouberol
+License: DWTFYWWI (Do What The Fuck You Want With It)  
 """
 
 from os import walk, getcwd, system
