@@ -55,17 +55,19 @@ def count_lines_by_extension(project_files):
         
         if type(extensions) is list: # ex : C++
             for extension in extensions: # C++ contains several exensions (hpp, cpp, h) 
-                for p_file in project_files:
+                for p_file in project_files: # for each project file 
                     if p_file.split('.')[-1].lower() == extension: #split returns file extension
-                        with open(p_file,'r') as f:
-                            nb_lines+=len(f.readlines())
+                        with open(p_file,'r') as f: # count nblines
+                            for line in f:
+                                Nb_lines+=1
             res.append(nb_lines)
             
         else:
             for p_file in project_files:
                 if p_file.split('.')[-1].lower() == extensions: #split returns file extension
                     with open(p_file,'r') as f:
-                        nb_lines+=len(f.readlines())
+                        for line in f:
+                            nb_lines+=1
             res.append(nb_lines)
 
     return res
