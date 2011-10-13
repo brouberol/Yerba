@@ -126,7 +126,12 @@ def yerba_main(project_root, yerba_root, title):
 if __name__ == '__main__':
     
     if len(argv) >1:
-        arg, opts = getopt(argv[2:], 't:')
+        try:
+            arg, opts = getopt(argv[2:], 't:')
+        except GetoptError as err:
+            print 'Error:', err
+            print 'Program is terminating.'
+            exit(2)
 
         title = None
         for o, a in arg:
