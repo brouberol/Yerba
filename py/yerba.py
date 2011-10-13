@@ -35,10 +35,9 @@ def stats_files(files):
 
     tot_nb_lines= 0
     for p_file in files:
-        f = open(p_file, 'r')
-        li = len(f.readlines())
-        f.close()
-        tot_nb_lines += li
+        with open(p_file, 'r') as f:
+            for line in f:
+                tot_nb_lines+=1
     nb_files = len(files)
 
     return (nb_files, tot_nb_lines)
