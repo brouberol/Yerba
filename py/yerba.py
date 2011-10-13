@@ -1,5 +1,5 @@
 from os import walk, getcwd, system
-from os.path import dirname, relpath, abspath
+from os.path import dirname, relpath, abspath, exists
 from sys import argv
 from getopt import getopt, GetoptError
 
@@ -124,13 +124,20 @@ def yerba_main(project_root, yerba_root, title):
     generate_html(project_root, yerba_root,  percent, stats, title)
 
 if __name__ == '__main__':
-    
+ 
+    EXIT_MESSAGE = 'Program is terminating.'
     if len(argv) >1:
+        
+        if argv[1].startswith('-'):
+            print 'Error : first argument must be the path to your project. Got %s instead.' %(argv[1])
+            print EXIT_MESSAGE
+            exit(2)
+
         try:
             arg, opts = getopt(argv[2:], 't:')
         except GetoptError as err:
             print 'Error:', err
-            print 'Program is terminating.'
+            print EXIT_MESSAGE
             exit(2)
 
         title = None
@@ -141,8 +148,13 @@ if __name__ == '__main__':
                 assert False, "unhandled option"
             
         yerba_root = dirname(abspath(argv[0])).replace('/py','')
-        root = relpath(argv[1])
-        yerba_main(root, yerba_root, title)
+        project_root = relpath(argv[1])
+        if exists(project_root):
+            yerba_main(project_root, yerba_root, title)
+        else:
+            print 'Error: the given path %s leads to no existing directory.' %(project_root)
+            print EXIT_MESSAGE
+            exit(2)
     
     else:
         print 'Too few arguments. Project root directory is needed.'
